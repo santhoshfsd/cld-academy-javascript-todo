@@ -40,7 +40,25 @@
 		var listItem = document.createElement("li");
 		listItem.appendChild(document.createTextNode(data.title));
 		myList.appendChild(listItem);
+		var deleteLink = document.createElement("a");
+		deleteLink.href = "#"
+		deleteLink.className = "btn btn-sm btn-danger m-1 delete"
+		deleteLink.appendChild(document.createTextNode("Delete"));
+		listItem.appendChild(deleteLink);
+		myList.appendChild(listItem);
 	})
+
+	function deleteTodo() {
+		var li = this.parentElement;
+		myList.removeChild(li)
+	}
+
+	var closeButtons = document.getElementsByClassName("delete");
+	for (var i = 0; i < closeButtons.length; i++) {
+		closeButtons[i].addEventListener('click', deleteTodo, false)
+	}
+
+
 
 </script>
 
