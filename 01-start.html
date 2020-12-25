@@ -28,16 +28,26 @@
 </body>
 
 <script>
+	var json_data = JSON.parse(localStorage.getItem("json_data"))
 	var myList = document.getElementById("todo-list");
 	registerListener()
-	var json_data = []
-	json_data.forEach(data => {
-		newTodo(data.title)
-	})
+	if (json_data) {
+		json_data.forEach(data => {
+			if (data) {
+				newTodo(data.title, data.id)
+			}
+
+		})
+
+	}
 
 	function deleteTodo() {
 		var li = this.parentElement;
 		myList.removeChild(li)
+		var temp = JSON.parse(localStorage.getItem("json_data"));
+		console.log(li.dataset);
+		delete temp[li.dataset.id]
+		localStorage.setItem("json_data", JSON.stringify(temp))
 	}
 	function registerListener() {
 		var closeButtons = document.getElementsByClassName("delete");
@@ -45,11 +55,13 @@
 			closeButtons[i].addEventListener('click', deleteTodo, false)
 		}
 	}
-	function newTodo(title) {
-		if (!title) {
+	function newTodo(title, id) {
+		if (!title && !id) {
 			title = document.getElementById("todoTitle").value;
+			var todoId = storeToLocalStorage(title)
 		}
 		var listItem = document.createElement("li");
+		listItem.dataset.id = todoId
 		listItem.appendChild(document.createTextNode(title));
 		myList.appendChild(listItem);
 		var deleteLink = document.createElement("a");
@@ -59,6 +71,21 @@
 		listItem.appendChild(deleteLink);
 		myList.appendChild(listItem);
 		registerListener();
+	}
+
+	function storeToLocalStorage(title) {
+		var temp = JSON.parse(localStorage.getItem("json_data"));
+		if (!temp) {
+			temp = []
+		}
+		var id = temp.length;
+		temp.push({
+			"id": id,
+			"title": title,
+			"completed": false
+		})
+		localStorage.setItem("json_data", JSON.stringify(temp))
+		return id;
 	}
 
 </script>
