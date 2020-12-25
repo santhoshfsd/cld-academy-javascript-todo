@@ -14,7 +14,6 @@
 		<div class="row mt-4">
 			<div class="col-8">
 				<ul id="todo-list">
-					<li>sd</li>
 				</ul>
 			</div>
 			<div class="col-4">
@@ -30,17 +29,37 @@
 
 <script>
 	var myList = document.getElementById("todo-list");
-	var json_data = [{
-		"title": "Jungle book"
-	},
-	{
-		"title": "Avengers"
-	}]
+	registerListener()
+	var json_data = []
 	json_data.forEach(data => {
-		var listItem = document.createElement("li");
-		listItem.appendChild(document.createTextNode(data.title));
-		myList.appendChild(listItem);
+		newTodo(data.title)
 	})
+
+	function deleteTodo() {
+		var li = this.parentElement;
+		myList.removeChild(li)
+	}
+	function registerListener() {
+		var closeButtons = document.getElementsByClassName("delete");
+		for (var i = 0; i < closeButtons.length; i++) {
+			closeButtons[i].addEventListener('click', deleteTodo, false)
+		}
+	}
+	function newTodo(title) {
+		if (!title) {
+			title = document.getElementById("todoTitle").value;
+		}
+		var listItem = document.createElement("li");
+		listItem.appendChild(document.createTextNode(title));
+		myList.appendChild(listItem);
+		var deleteLink = document.createElement("a");
+		deleteLink.href = "#"
+		deleteLink.className = "btn btn-sm btn-danger m-1 delete"
+		deleteLink.appendChild(document.createTextNode("Delete"));
+		listItem.appendChild(deleteLink);
+		myList.appendChild(listItem);
+		registerListener();
+	}
 
 </script>
 
